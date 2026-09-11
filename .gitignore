@@ -1,0 +1,22 @@
+# OS / editor cruft
+Thumbs.db
+Desktop.ini
+.DS_Store
+*.swp
+.vscode/
+.idea/
+
+# Logs / temp
+*.log
+tmp/
+temp/
+
+# Node (if tooling is added later)
+node_modules/
+npm-debug.log*
+
+# Python (local server / tooling)
+__pycache__/
+*.pyc
+.venv/
+env/
