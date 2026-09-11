@@ -1,0 +1,15 @@
+{
+  "name": "washnow",
+  "version": "1.0.0",
+  "private": true,
+  "description": "WashNow — hospitality & healthcare commercial laundry and linen management website (static).",
+  "scripts": {
+    "start": "serve -s . -l ${PORT:-9090}"
+  },
+  "dependencies": {
+    "serve": "^14.2.4"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
