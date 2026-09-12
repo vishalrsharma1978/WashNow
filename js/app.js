@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initModals();
   initRfidSimulation();
   initMetricsCounter();
+  initHeroShowcase();
   initChatbot();
 });
 
@@ -465,7 +466,52 @@ function initMetricsCounter() {
 }
 
 /* --------------------------------------------------------------------------
-   10. WashBot Chatbot (driven by owner-editable chatbot-config.js)
+   10. Hero Offering Showcase (auto-rotating images)
+   -------------------------------------------------------------------------- */
+function initHeroShowcase() {
+  const showcase = document.getElementById('hero-showcase');
+  if (!showcase) return;
+
+  const slides = Array.from(showcase.querySelectorAll('.showcase-slide'));
+  const dotsWrap = document.getElementById('showcase-dots');
+  if (slides.length === 0) return;
+
+  let current = 0;
+  let timer = null;
+
+  // Build dots
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'showcase-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Show offering ' + (i + 1));
+    dot.addEventListener('click', () => { show(i); restart(); });
+    dotsWrap && dotsWrap.appendChild(dot);
+  });
+  const dots = dotsWrap ? Array.from(dotsWrap.children) : [];
+
+  function show(index) {
+    current = (index + slides.length) % slides.length;
+    slides.forEach((s, i) => s.classList.toggle('active', i === current));
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+  }
+
+  function next() { show(current + 1); }
+
+  function restart() {
+    if (timer) clearInterval(timer);
+    timer = setInterval(next, 3500);
+  }
+
+  // Pause on hover
+  showcase.addEventListener('mouseenter', () => timer && clearInterval(timer));
+  showcase.addEventListener('mouseleave', restart);
+
+  restart();
+}
+
+/* --------------------------------------------------------------------------
+   11. WashBot Chatbot (driven by owner-editable chatbot-config.js)
    -------------------------------------------------------------------------- */
 function initChatbot() {
   const cfg = window.WASHNOW_CHATBOT_CONFIG;
