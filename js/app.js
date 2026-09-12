@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initModals();
   initRfidSimulation();
   initMetricsCounter();
+  initChatbot();
 });
 
 /* --------------------------------------------------------------------------
@@ -462,3 +463,164 @@ function initMetricsCounter() {
     observer.observe(statsSection);
   }
 }
+
+/* --------------------------------------------------------------------------
+   10. WashBot Chatbot (driven by owner-editable chatbot-config.js)
+   -------------------------------------------------------------------------- */
+function initChatbot() {
+  const cfg = window.WASHNOW_CHATBOT_CONFIG;
+  const widget = document.getElementById('washbot');
+  if (!cfg || !widget) return;
+
+  const toggleBtn = document.getElementById('washbot-toggle');
+  const closeBtn = document.getElementById('washbot-close');
+  const panel = document.getElementById('washbot-panel');
+  const messages = document.getElementById('washbot-messages');
+  const suggestions = document.getElementById('washbot-suggestions');
+  const form = document.getElementById('washbot-form');
+  const input = document.getElementById('washbot-text');
+  const nameEl = document.getElementById('washbot-name');
+
+  if (nameEl && cfg.botName) nameEl.textContent = cfg.botName;
+
+  let greeted = false;
+
+  function openBot() {
+    widget.classList.add('open');
+    if (!greeted) {
+      greeted = true;
+      addBot(cfg.greeting || 'Hello! How can I help you?');
+      renderSuggestions();
+    }
+    setTimeout(() => input && input.focus(), 200);
+  }
+
+  function closeBot() {
+    widget.classList.remove('open');
+  }
+
+  function scrollDown() {
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function addUser(text) {
+    const el = document.createElement('div');
+    el.className = 'washbot-msg user';
+    el.textContent = text;
+    messages.appendChild(el);
+    scrollDown();
+  }
+
+  function addBot(text, withContact) {
+    const el = document.createElement('div');
+    el.className = 'washbot-msg bot';
+    el.textContent = text;
+    if (withContact) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'washbot-contact-btn';
+      btn.innerHTML = `${escapeHtml(cfg.contactButtonLabel || 'Contact Us')}` +
+        ` <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
+      btn.addEventListener('click', goToContact);
+      el.appendChild(document.createElement('br'));
+      el.appendChild(btn);
+    }
+    messages.appendChild(el);
+    scrollDown();
+  }
+
+  function showTyping() {
+    const t = document.createElement('div');
+    t.className = 'washbot-typing';
+    t.id = 'washbot-typing';
+    t.innerHTML = '<span></span><span></span><span></span>';
+    messages.appendChild(t);
+    scrollDown();
+  }
+
+  function hideTyping() {
+    const t = document.getElementById('washbot-typing');
+    if (t) t.remove();
+  }
+
+  function goToContact() {
+    const id = cfg.contactSectionId || 'contact';
+    const section = document.getElementById(id);
+    if (section) section.scrollIntoView({ behavior: 'smooth' });
+    closeBot();
+  }
+
+  function renderSuggestions() {
+    if (!suggestions) return;
+    suggestions.innerHTML = '';
+    (cfg.questionnaire || []).forEach(item => {
+      if (!item.question) return;
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'washbot-chip';
+      chip.textContent = item.question;
+      chip.addEventListener('click', () => handleUserMessage(item.question));
+      suggestions.appendChild(chip);
+    });
+  }
+
+  // Keyword-based matching against the questionnaire
+  function findAnswer(text) {
+    const q = text.toLowerCase();
+    let best = null;
+    let bestScore = 0;
+
+    (cfg.questionnaire || []).forEach(item => {
+      let score = 0;
+      (item.keywords || []).forEach(kw => {
+        if (kw && q.indexOf(kw.toLowerCase()) !== -1) {
+          score += kw.split(' ').length; // multi-word keywords weigh more
+        }
+      });
+      // Exact/near match on the question text is a strong signal
+      if (item.question && q === item.question.toLowerCase()) score += 100;
+      if (score > bestScore) {
+        bestScore = score;
+        best = item;
+      }
+    });
+
+    return bestScore > 0 ? best : null;
+  }
+
+  function handleUserMessage(text) {
+    const clean = (text || '').trim();
+    if (!clean) return;
+    addUser(clean);
+    if (input) input.value = '';
+
+    showTyping();
+    setTimeout(() => {
+      hideTyping();
+      const match = findAnswer(clean);
+      if (match) {
+        addBot(match.answer);
+      } else {
+        const parts = (cfg.fallbackMessage || 'Please contact us. {contact}').split('{contact}');
+        addBot(parts[0].trim(), true);
+      }
+    }, 650);
+  }
+
+  function escapeHtml(s) {
+    const d = document.createElement('div');
+    d.textContent = s == null ? '' : String(s);
+    return d.innerHTML;
+  }
+
+  toggleBtn && toggleBtn.addEventListener('click', () => {
+    widget.classList.contains('open') ? closeBot() : openBot();
+  });
+  closeBtn && closeBtn.addEventListener('click', closeBot);
+
+  form && form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    handleUserMessage(input.value);
+  });
+}
+

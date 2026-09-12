@@ -7,6 +7,7 @@
   <meta name="description" content="WashNow is India's leading commercial laundry and linen management provider. Engineered for Indian climate extremes, monsoon humidity, and luxury fabric adaptations.">
   <link rel="icon" type="image/png" href="assets/washnow-logo.png">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/chatbot.css">
 </head>
 <body>
 
@@ -1885,6 +1886,38 @@
     </div>
   </div>
 
+  <!-- WashBot Chatbot Widget -->
+  <div class="washbot" id="washbot">
+    <div class="washbot-panel" id="washbot-panel" role="dialog" aria-label="WashNow chat assistant">
+      <div class="washbot-header">
+        <div class="washbot-avatar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        </div>
+        <div>
+          <div class="washbot-title" id="washbot-name">WashBot</div>
+          <div class="washbot-status">Online • Replies instantly</div>
+        </div>
+        <button class="washbot-close-btn" id="washbot-close" aria-label="Close chat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="washbot-messages" id="washbot-messages"></div>
+      <div class="washbot-suggestions" id="washbot-suggestions"></div>
+      <form class="washbot-input" id="washbot-form">
+        <input type="text" id="washbot-text" placeholder="Ask about our services..." autocomplete="off" aria-label="Type your question">
+        <button type="submit" class="washbot-send" aria-label="Send message">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </form>
+    </div>
+    <button class="washbot-toggle" id="washbot-toggle" aria-label="Open chat assistant">
+      <span class="washbot-badge"></span>
+      <svg class="icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+
+  <script src="chatbot-config.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
