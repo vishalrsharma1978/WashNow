@@ -429,3 +429,111 @@
   .tracker-card, .audit-form, .audit-info { padding: 1.75rem; }
   .audit-slots { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ==========================================================================
+   Global Mobile Refinements (header, spacing, sections)
+   ========================================================================== */
+
+/* Mobile-menu extras hidden on desktop */
+.nav-mobile-extra { display: none; }
+
+@media (max-width: 768px) {
+  .container { padding-left: 1rem; padding-right: 1rem; }
+
+  /* --- Compact header --- */
+  .header-container { height: 62px; }
+  .logo-icon-wrap { height: 36px; padding: 4px 7px; border-radius: 9px; }
+  .logo-brand { font-size: 1.1rem; }
+  .logo-tagline { font-size: 0.5rem; letter-spacing: 0.07em; margin-top: 1px; }
+  .header-actions { gap: 0.5rem; }
+
+  /* Move language switch + CTA into the slide-down menu */
+  .header-actions .lang-switch,
+  .header-actions .btn-open-quote { display: none; }
+
+  .nav-menu {
+    top: 62px;
+    max-height: calc(100vh - 62px);
+    overflow-y: auto;
+  }
+
+  .nav-mobile-extra {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.9rem;
+    width: 100%;
+    margin-top: 0.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-light);
+  }
+  .nav-mobile-lang-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+  }
+  .nav-mobile-extra .lang-switch { display: inline-flex !important; }
+  .nav-mobile-extra .btn { width: 100%; }
+
+  /* --- Section rhythm: tighten vertical padding on phones --- */
+  .solutions-section,
+  .vertical-section,
+  .weather-adaptation-section,
+  .calculator-section,
+  .tech-sustainability-section,
+  .industries-section,
+  .tracker-section,
+  .audit-section,
+  .cta-section,
+  .impact-ribbon { padding-top: 3.5rem; padding-bottom: 3.5rem; }
+
+  .section-title { font-size: 1.6rem; }
+  .vertical-head h2, .tech-content h2, .cta-box h2, .audit-info h2 { font-size: 1.55rem; }
+  .section-subtitle { font-size: 1rem; }
+
+  /* --- Hero --- */
+  .hero { padding: 3rem 0 3.5rem; }
+  .hero-content h1 { font-size: 2rem; }
+  .hero-lead { font-size: 1rem; }
+  .hero-stats-row { gap: 1rem; }
+  .stat-number { font-size: 1.5rem; }
+
+  /* --- Impact ribbon --- */
+  .impact-num { font-size: 1.6rem; }
+
+  /* --- Track My Linen: horizontal step names stay legible --- */
+  .tracker-input-row { flex-direction: column; }
+  .tracker-input-row .btn { width: 100%; justify-content: center; }
+  .tracker-steps { gap: 0.25rem; }
+  .tracker-step-name { font-size: 0.6rem; line-height: 1.2; }
+  .tracker-step-time { font-size: 0.58rem; }
+  .tracker-progress-line, .tracker-progress-fill { top: 22px; }
+  .tracker-dot { width: 40px; height: 40px; }
+  .tracker-dot svg { width: 18px; height: 18px; }
+
+  /* --- Audit --- */
+  .audit-info { padding: 2rem 1.75rem; }
+  .audit-segment { flex-direction: column; }
+  .audit-chip { min-width: 0; }
+
+  /* --- Chatbot: fit small screens --- */
+  .washbot { right: 14px; bottom: 14px; }
+  .washbot-panel { width: calc(100vw - 28px); height: 72vh; bottom: 72px; }
+  .washbot-toggle { width: 56px; height: 56px; }
+
+  /* --- Weather tabs wrap nicely --- */
+  .weather-tab-btn { font-size: 0.82rem; padding: 0.7rem 1.1rem; }
+
+  /* --- Buttons: comfortable tap targets --- */
+  .btn { padding: 0.8rem 1.4rem; }
+}
+
+@media (max-width: 400px) {
+  .logo-tagline { display: none; }
+  .hero-content h1 { font-size: 1.7rem; }
+  .section-title { font-size: 1.4rem; }
+  .tracker-step-name { font-size: 0.54rem; }
+  .washbot-suggestions { padding: 0.5rem 0.6rem; }
+}

@@ -335,6 +335,8 @@ function initModals() {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       if (quoteModal) quoteModal.classList.add('active');
+      const navMenu = document.querySelector('.nav-menu');
+      if (navMenu) navMenu.classList.remove('active');
     });
   });
 
@@ -519,10 +521,9 @@ function initHeroShowcase() {
    -------------------------------------------------------------------------- */
 function initLanguageSwitch() {
   const dict = window.WASHNOW_I18N;
-  const sw = document.getElementById('lang-switch');
-  if (!dict || !sw) return;
-
-  const buttons = sw.querySelectorAll('.lang-btn');
+  if (!dict) return;
+  const buttons = document.querySelectorAll('.lang-btn');
+  if (buttons.length === 0) return;
 
   function apply(lang) {
     const pack = dict[lang] || dict.en;
@@ -535,6 +536,7 @@ function initLanguageSwitch() {
       if (pack[key] != null) el.innerHTML = pack[key];
     });
     document.documentElement.setAttribute('lang', lang);
+    // Sync active state across ALL language switches (header + mobile menu)
     buttons.forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
     try { localStorage.setItem('washnow_lang', lang); } catch (e) {}
   }
