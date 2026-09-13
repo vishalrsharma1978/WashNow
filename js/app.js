@@ -545,6 +545,44 @@ function initHeroShowcase() {
 /* --------------------------------------------------------------------------
    11. Multilingual Language Switch (EN / हिन्दी / मराठी)
    -------------------------------------------------------------------------- */
+/* Auto-translate: swaps text nodes by matching a phrase dictionary, so content
+   without explicit data-i18n tags still translates. Original English is cached
+   on first run so switching back to English restores it. */
+var __autoNodes = null;
+function collectAutoNodes() {
+  __autoNodes = [];
+  const phrases = (window.WASHNOW_I18N && window.WASHNOW_I18N.phrases) || null;
+  if (!phrases) return;
+  const known = new Set();
+  Object.keys(phrases).forEach(lang => Object.keys(phrases[lang]).forEach(k => known.add(k)));
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+    acceptNode: (node) => {
+      if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+      const p = node.parentElement;
+      if (!p) return NodeFilter.FILTER_REJECT;
+      if (p.closest('[data-i18n], [data-i18n-html], script, style, noscript, .lang-menu, #rfid-stream, .washbot')) {
+        return NodeFilter.FILTER_REJECT;
+      }
+      return known.has(node.nodeValue.trim()) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+    }
+  });
+  while (walker.nextNode()) {
+    const node = walker.currentNode;
+    __autoNodes.push({ node: node, original: node.nodeValue, en: node.nodeValue.trim() });
+  }
+}
+
+function applyAutoTranslate(lang) {
+  const phrases = (window.WASHNOW_I18N && window.WASHNOW_I18N.phrases) || null;
+  if (!phrases) return;
+  if (__autoNodes === null) collectAutoNodes();
+  const map = lang === 'en' ? null : phrases[lang];
+  __autoNodes.forEach(item => {
+    const target = (lang === 'en') ? item.en : ((map && map[item.en]) || item.en);
+    item.node.nodeValue = item.original.replace(item.en, target);
+  });
+}
+
 function initLanguageSwitch() {
   const dict = window.WASHNOW_I18N;
   if (!dict) return;
@@ -566,6 +604,7 @@ function initLanguageSwitch() {
       const key = el.getAttribute('data-i18n-html');
       if (pack[key] != null) el.innerHTML = pack[key];
     });
+    applyAutoTranslate(lang);
     document.documentElement.setAttribute('lang', lang);
     options.forEach(o => o.classList.toggle('active', o.dataset.lang === lang));
     const label = trigger.querySelector('.lang-trigger-text');
