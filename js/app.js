@@ -52,6 +52,32 @@ function initNavigation() {
       });
     });
   }
+
+  initScrollSpy();
+}
+
+/* Highlight the nav item for the section currently in view */
+function initScrollSpy() {
+  const links = Array.from(document.querySelectorAll('.nav-link'));
+  const map = new Map();
+  links.forEach(link => {
+    const id = (link.getAttribute('href') || '').replace('#', '');
+    const section = id && document.getElementById(id);
+    if (section) map.set(section, link);
+  });
+  if (map.size === 0) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        links.forEach(l => l.classList.remove('active-nav'));
+        const link = map.get(entry.target);
+        if (link) link.classList.add('active-nav');
+      }
+    });
+  }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+
+  map.forEach((_, section) => observer.observe(section));
 }
 
 /* --------------------------------------------------------------------------
