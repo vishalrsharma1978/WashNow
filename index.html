@@ -60,22 +60,32 @@
 
         <!-- Mobile-only extras inside the slide-down menu -->
         <div class="nav-mobile-extra">
-          <span class="nav-mobile-lang-label">Language</span>
-          <div class="lang-switch lang-switch-mobile" role="group" aria-label="Language">
-            <button class="lang-btn active" data-lang="en">EN</button>
-            <button class="lang-btn" data-lang="hi">हिं</button>
-            <button class="lang-btn" data-lang="mr">मरा</button>
-          </div>
           <button class="btn btn-primary btn-open-quote">Request Proposal</button>
         </div>
       </nav>
 
       <!-- Header Actions -->
       <div class="header-actions">
-        <div class="lang-switch" id="lang-switch" role="group" aria-label="Language">
-          <button class="lang-btn active" data-lang="en">EN</button>
-          <button class="lang-btn" data-lang="hi">हिं</button>
-          <button class="lang-btn" data-lang="mr">मरा</button>
+        <div class="lang-dropdown" id="lang-dropdown">
+          <button class="lang-trigger" id="lang-trigger" aria-haspopup="true" aria-expanded="false" aria-label="Translate this site">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+            <span class="lang-trigger-text">Translate</span>
+            <svg class="lang-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="lang-menu" id="lang-menu" role="menu" aria-label="Choose language">
+            <button class="lang-option active" data-lang="en" role="menuitem">
+              <span class="lang-opt-name">English</span>
+              <svg class="lang-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </button>
+            <button class="lang-option" data-lang="hi" role="menuitem">
+              <span class="lang-opt-name">हिन्दी <small>Hindi</small></span>
+              <svg class="lang-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </button>
+            <button class="lang-option" data-lang="mr" role="menuitem">
+              <span class="lang-opt-name">मराठी <small>Marathi</small></span>
+              <svg class="lang-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </button>
+          </div>
         </div>
         <button class="btn btn-primary btn-sm btn-open-quote">Request Proposal</button>
         <button class="mobile-toggle" aria-label="Toggle navigation">

@@ -548,8 +548,13 @@ function initHeroShowcase() {
 function initLanguageSwitch() {
   const dict = window.WASHNOW_I18N;
   if (!dict) return;
-  const buttons = document.querySelectorAll('.lang-btn');
-  if (buttons.length === 0) return;
+  const dropdown = document.getElementById('lang-dropdown');
+  const trigger = document.getElementById('lang-trigger');
+  const menu = document.getElementById('lang-menu');
+  const options = menu ? Array.from(menu.querySelectorAll('.lang-option')) : [];
+  if (!dropdown || !trigger || options.length === 0) return;
+
+  const labels = { en: 'Translate', hi: 'हिन्दी', mr: 'मराठी' };
 
   function apply(lang) {
     const pack = dict[lang] || dict.en;
@@ -562,12 +567,32 @@ function initLanguageSwitch() {
       if (pack[key] != null) el.innerHTML = pack[key];
     });
     document.documentElement.setAttribute('lang', lang);
-    // Sync active state across ALL language switches (header + mobile menu)
-    buttons.forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+    options.forEach(o => o.classList.toggle('active', o.dataset.lang === lang));
+    const label = trigger.querySelector('.lang-trigger-text');
+    if (label) label.textContent = labels[lang] || 'Translate';
     try { localStorage.setItem('washnow_lang', lang); } catch (e) {}
   }
 
-  buttons.forEach(btn => btn.addEventListener('click', () => apply(btn.dataset.lang)));
+  function openMenu() { dropdown.classList.add('open'); trigger.setAttribute('aria-expanded', 'true'); }
+  function closeMenu() { dropdown.classList.remove('open'); trigger.setAttribute('aria-expanded', 'false'); }
+
+  trigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    dropdown.classList.contains('open') ? closeMenu() : openMenu();
+  });
+
+  options.forEach(opt => {
+    opt.addEventListener('click', () => {
+      apply(opt.dataset.lang);
+      closeMenu();
+    });
+  });
+
+  // Close on outside click or Escape
+  document.addEventListener('click', (e) => {
+    if (!dropdown.contains(e.target)) closeMenu();
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
 
   let saved = 'en';
   try { saved = localStorage.getItem('washnow_lang') || 'en'; } catch (e) {}
