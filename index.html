@@ -85,6 +85,42 @@
               <span class="lang-opt-name">मराठी <small>Marathi</small></span>
               <svg class="lang-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
             </button>
+            <button class="lang-option" data-lang="gu" role="menuitem">
+              <span class="lang-opt-name">ગુજરાતી <small>Gujarati</small></span>
+              <svg class="lang-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </button>
+            <button class="lang-option" data-lang="ta" role="menuitem">
+              <span class="lang-opt-name">தமிழ் <small>Tamil</small></span>
+              <svg class="lang-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </button>
+            <button class="lang-option" data-lang="te" role="menuitem">
+              <span class="lang-opt-name">తెలుగు <small>Telugu</small></span>
+              <svg class="lang-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </button>
+            <button class="lang-option" data-lang="kn" role="menuitem">
+              <span class="lang-opt-name">ಕನ್ನಡ <small>Kannada</small></span>
+              <svg class="lang-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </button>
+            <button class="lang-option" data-lang="bn" role="menuitem">
+              <span class="lang-opt-name">বাংলা <small>Bengali</small></span>
+              <svg class="lang-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </button>
+            <button class="lang-option" data-lang="pa" role="menuitem">
+              <span class="lang-opt-name">ਪੰਜਾਬੀ <small>Punjabi</small></span>
+              <svg class="lang-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </button>
+            <button class="lang-option" data-lang="ml" role="menuitem">
+              <span class="lang-opt-name">മലയാളം <small>Malayalam</small></span>
+              <svg class="lang-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </button>
+            <button class="lang-option" data-lang="or" role="menuitem">
+              <span class="lang-opt-name">ଓଡ଼ିଆ <small>Odia</small></span>
+              <svg class="lang-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </button>
+            <button class="lang-option" data-lang="ur" role="menuitem">
+              <span class="lang-opt-name">اردو <small>Urdu</small></span>
+              <svg class="lang-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </button>
           </div>
         </div>
         <button class="btn btn-primary btn-sm btn-open-quote">Request Proposal</button>
@@ -2162,6 +2198,19 @@
       <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
   </div>
+
+  <!-- Hidden Google Website Translate widget (drives the custom Translate dropdown) -->
+  <div id="google_translate_element" aria-hidden="true"></div>
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'hi,mr,gu,ta,te,kn,bn,pa,ml,or,ur',
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+  </script>
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
   <script src="js/i18n.js"></script>
   <script src="chatbot-config.js"></script>

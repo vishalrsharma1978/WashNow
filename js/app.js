@@ -584,32 +584,59 @@ function applyAutoTranslate(lang) {
 }
 
 function initLanguageSwitch() {
-  const dict = window.WASHNOW_I18N;
-  if (!dict) return;
   const dropdown = document.getElementById('lang-dropdown');
   const trigger = document.getElementById('lang-trigger');
   const menu = document.getElementById('lang-menu');
   const options = menu ? Array.from(menu.querySelectorAll('.lang-option')) : [];
   if (!dropdown || !trigger || options.length === 0) return;
 
-  const labels = { en: 'Translate', hi: 'हिन्दी', mr: 'मराठी' };
+  const labels = {
+    en: 'Translate', hi: 'हिन्दी', mr: 'मराठी', gu: 'ગુજરાતી', ta: 'தமிழ்',
+    te: 'తెలుగు', kn: 'ಕನ್ನಡ', bn: 'বাংলা', pa: 'ਪੰਜਾਬੀ', ml: 'മലയാളം',
+    or: 'ଓଡ଼ିଆ', ur: 'اردو'
+  };
 
-  function apply(lang) {
-    const pack = dict[lang] || dict.en;
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      const key = el.getAttribute('data-i18n');
-      if (pack[key] != null) el.textContent = pack[key];
-    });
-    document.querySelectorAll('[data-i18n-html]').forEach(el => {
-      const key = el.getAttribute('data-i18n-html');
-      if (pack[key] != null) el.innerHTML = pack[key];
-    });
-    applyAutoTranslate(lang);
-    document.documentElement.setAttribute('lang', lang);
+  function setCookie(name, value) {
+    // Set for current host and (for onrender.com / custom domains) parent domain too.
+    document.cookie = name + '=' + value + ';path=/';
+    const host = location.hostname;
+    document.cookie = name + '=' + value + ';path=/;domain=' + host;
+    const parts = host.split('.');
+    if (parts.length > 2) {
+      document.cookie = name + '=' + value + ';path=/;domain=.' + parts.slice(-2).join('.');
+    }
+  }
+
+  function eraseCookie(name) {
+    const expired = '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
+    const host = location.hostname;
+    document.cookie = name + expired;
+    document.cookie = name + expired.slice(0, -7) + ';domain=' + host;
+    const parts = host.split('.');
+    if (parts.length > 2) {
+      document.cookie = name + expired.slice(0, -7) + ';domain=.' + parts.slice(-2).join('.');
+    }
+  }
+
+  function currentLang() {
+    const m = document.cookie.match(/googtrans=\/[^/]*\/([^;]+)/);
+    return m ? m[1] : 'en';
+  }
+
+  function chooseLang(lang) {
+    if (lang === 'en') {
+      eraseCookie('googtrans');
+    } else {
+      setCookie('googtrans', '/en/' + lang);
+    }
+    try { localStorage.setItem('washnow_lang', lang); } catch (e) {}
+    location.reload();
+  }
+
+  function reflectActive(lang) {
     options.forEach(o => o.classList.toggle('active', o.dataset.lang === lang));
     const label = trigger.querySelector('.lang-trigger-text');
     if (label) label.textContent = labels[lang] || 'Translate';
-    try { localStorage.setItem('washnow_lang', lang); } catch (e) {}
   }
 
   function openMenu() { dropdown.classList.add('open'); trigger.setAttribute('aria-expanded', 'true'); }
@@ -621,21 +648,14 @@ function initLanguageSwitch() {
   });
 
   options.forEach(opt => {
-    opt.addEventListener('click', () => {
-      apply(opt.dataset.lang);
-      closeMenu();
-    });
+    opt.addEventListener('click', () => { closeMenu(); chooseLang(opt.dataset.lang); });
   });
 
-  // Close on outside click or Escape
-  document.addEventListener('click', (e) => {
-    if (!dropdown.contains(e.target)) closeMenu();
-  });
+  document.addEventListener('click', (e) => { if (!dropdown.contains(e.target)) closeMenu(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
 
-  let saved = 'en';
-  try { saved = localStorage.getItem('washnow_lang') || 'en'; } catch (e) {}
-  if (saved !== 'en') apply(saved);
+  // Reflect the active language chosen previously (from the Google Translate cookie)
+  reflectActive(currentLang());
 }
 
 /* --------------------------------------------------------------------------

@@ -48,6 +48,8 @@
   top: calc(100% + 8px);
   right: 0;
   min-width: 190px;
+  max-height: 60vh;
+  overflow-y: auto;
   background: #fff;
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
@@ -104,6 +106,17 @@
 
 .lang-option.active { color: var(--color-secondary); background: rgba(0, 180, 216, 0.08); }
 .lang-option.active .lang-check { opacity: 1; }
+
+/* Hide Google Website Translate default UI (banner, tooltip, highlight) */
+#google_translate_element { display: none !important; }
+.goog-te-banner-frame.skiptranslate,
+.goog-te-gadget-icon,
+.goog-te-balloon-frame { display: none !important; }
+.goog-te-gadget { height: 0; overflow: hidden; font-size: 0 !important; }
+body { top: 0 !important; position: static !important; }
+.goog-tooltip, .goog-tooltip:hover { display: none !important; }
+.goog-text-highlight { background: none !important; box-shadow: none !important; }
+.skiptranslate iframe { visibility: hidden !important; height: 0 !important; }
 
 /* -------------------------------------------------------------------------
    Live Sustainability Impact Ribbon
