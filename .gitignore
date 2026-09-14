@@ -20,3 +20,6 @@ __pycache__/
 *.pyc
 .venv/
 env/
+
+# temp screenshots
+_*.png
